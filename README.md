@@ -18,9 +18,9 @@ bundle install
 
 ## Usage
 
-### Basic Setup
+### Complete Setup
 
-Include the module in your test class:
+**1. Include the module in your test class:**
 
 ```ruby
 require 'capybara/presenter'
@@ -28,8 +28,46 @@ require 'capybara/presenter'
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Capybara::Presenter
   
-  # Disable parallel testing in presenter mode
+  # Disable parallel testing in presenter mode for sequential execution
   parallelize(workers: 1) if ENV["PRESENTER_MODE"] == "true"
+  
+  # Configure browser driver for presenter mode
+  if ENV["PRESENTER_MODE"] == "true"
+    driven_by :selenium, using: :chrome, screen_size: [1920, 1080]
+  else
+    driven_by :selenium, using: :headless_chrome
+  end
+  
+  # Add test start notifications and automatic delays
+  setup do
+    if presenter_mode?
+      presenter_test_start_notification(self.class, @NAME)
+      setup_presenter_delays
+    end
+  end
+end
+```
+
+**2. For Minitest users, also add to your individual test classes:**
+
+```ruby
+class UsersSystemTest < ApplicationSystemTestCase
+  # Test methods automatically get start notifications
+end
+```
+
+**3. For RSpec users:**
+
+```ruby
+RSpec.configure do |config|
+  config.include Capybara::Presenter, type: :system
+  
+  config.before(:each, type: :system) do
+    if presenter_mode?
+      presenter_test_start_notification(self.class, example.description)
+      setup_presenter_delays
+    end
+  end
 end
 ```
 

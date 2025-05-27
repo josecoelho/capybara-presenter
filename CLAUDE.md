@@ -44,6 +44,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Configuration precedence**: Environment variables override global configuration
 - **Sample app**: Complete working example in `examples/sample_app/` using Sinatra
 
+### Setup Requirements
+
+For full functionality, tests need:
+1. **Parallel testing disabled**: `parallelize(workers: 1)` when PRESENTER_MODE=true
+2. **Non-headless browser**: `driven_by :selenium, using: :chrome` for notifications
+3. **Test start notifications**: Call `presenter_test_start_notification(self.class, @NAME)` in setup
+4. **Automatic delays**: Call `setup_presenter_delays` in setup for action delays
+
 ### Development Notes
 
 - **Ruby version**: Requires >= 3.2.0
