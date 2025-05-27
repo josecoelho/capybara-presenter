@@ -37,7 +37,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "capybara", ">= 3.0"
   spec.add_dependency "selenium-webdriver", ">= 4.0"
 
-  # Development dependencies  
+  # Development dependencies
+  spec.add_development_dependency "lefthook", "~> 1.11"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "rubocop", "~> 1.75"
+  spec.add_development_dependency "rubocop-minitest", "~> 0.38"
 end
