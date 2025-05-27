@@ -1,0 +1,8 @@
+pre-commit:
+  commands:
+    rubocop:
+      run: bundle exec rubocop {staged_files}
+      glob: "*.rb"
+      stage_fixed: true
+    tests:
+      run: bundle exec rake test

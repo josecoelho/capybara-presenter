@@ -1,0 +1,25 @@
+AllCops:
+  TargetRubyVersion: 3.1
+  SuggestExtensions: false
+
+require:
+  - rubocop-minitest
+
+# Exclude test directories from metrics
+Metrics:
+  Exclude:
+    - 'test/**/*'
+    - 'examples/**/*'
+
+# Disable problematic cops
+Lint/MissingCopEnableDirective:
+  Enabled: false
+
+Lint/DuplicateBranch:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
