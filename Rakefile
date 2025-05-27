@@ -27,13 +27,6 @@ namespace :presenter do
     end
   end
 
-  desc 'Run the sample app with live browser demo'
-  task :browser do
-    Dir.chdir('examples/sample_app') do
-      sh 'ruby run_demo.rb'
-    end
-  end
-
   desc 'Run presenter with custom delays (DELAY=3.0 START_DELAY=2.0)'
   task :slow do
     delay = ENV['DELAY'] || '3.0'
@@ -52,7 +45,6 @@ namespace :presenter do
         rake test               - Run gem unit tests
         rake presenter:test     - Run sample app tests (normal mode)
         rake presenter:run      - Run sample app tests (presenter mode)
-        rake presenter:browser  - Run live browser demo
         rake presenter:slow     - Run presenter with slower timing
 
       Custom Presenter Options:
@@ -73,37 +65,6 @@ namespace :presenter do
 end
 # rubocop:enable Metrics/BlockLength
 
-# Examples namespace
-namespace :examples do
-  desc 'Run the Ruby gem usage example'
-  task :ruby do
-    sh 'ruby examples/real_gem_demo.rb'
-  end
-
-  desc 'Open the HTML demo in browser'
-  task :html do
-    sh 'open examples/simple_demo.html'
-  end
-
-  desc 'List all examples'
-  task :list do
-    puts <<~EXAMPLES
-      📁 Available Examples:
-
-      Ruby Examples:
-        rake examples:ruby     - Real gem functionality demo
-      #{'  '}
-      HTML Examples:
-        rake examples:html     - Simple browser notification demo
-      #{'  '}
-      Sample App:
-        rake presenter:test     - System tests (normal mode)
-        rake presenter:run      - System tests (presenter mode)
-        rake presenter:browser  - Live browser demo
-    EXAMPLES
-  end
-end
-
 task default: :test
 
 # Add help task at top level
@@ -115,7 +76,6 @@ task :help do
     Main Commands:
       rake test              - Run gem tests
       rake presenter:help    - Presenter options
-      rake examples:list     - Available examples
     #{'  '}
     Quick Start:
       rake presenter:run     - See the gem in action!
