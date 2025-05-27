@@ -1,6 +1,8 @@
 # Capybara::Presenter
 
-Transform your Capybara system tests into polished presentations with automatic delays and browser notifications. Perfect for creating professional test recordings and demos.
+Transform your Capybara system tests into a presentations with automatic delays and browser notifications. Perfect for creating test recordings and demos.
+
+I had this in a project and it helps me give quick updates about the progress of a feature. I like to [communicate often](https://josecoelho.com/Software-Engineer/Communicate-often), the easier, the better. Decided to extract it to a gem with some help from Claude. I hope it's usful for you as well. :)
 
 ![Demo](./examples/presenter.gif)
 
