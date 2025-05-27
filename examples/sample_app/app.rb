@@ -4,20 +4,20 @@
 class SampleApp
   def call(env)
     request = Rack::Request.new(env)
-    
+
     case request.path_info
-    when "/"
-      [200, {"Content-Type" => "text/html"}, [homepage]]
-    when "/users/new"
-      [200, {"Content-Type" => "text/html"}, [registration_form]]
-    when "/users"
+    when '/'
+      [200, { 'Content-Type' => 'text/html' }, [homepage]]
+    when '/users/new'
+      [200, { 'Content-Type' => 'text/html' }, [registration_form]]
+    when '/users'
       if request.post?
-        [200, {"Content-Type" => "text/html"}, [success_page]]
+        [200, { 'Content-Type' => 'text/html' }, [success_page]]
       else
-        [404, {"Content-Type" => "text/plain"}, ["Not Found"]]
+        [404, { 'Content-Type' => 'text/plain' }, ['Not Found']]
       end
     else
-      [404, {"Content-Type" => "text/plain"}, ["Not Found"]]
+      [404, { 'Content-Type' => 'text/plain' }, ['Not Found']]
     end
   end
 

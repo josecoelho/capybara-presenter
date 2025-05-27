@@ -1,6 +1,70 @@
 module Capybara
-  module Demo
+  module Presenter
     VERSION: String
-    # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+    class Configuration
+      attr_reader enabled: bool
+      attr_reader delay: Float
+      attr_reader notifications: bool
+      attr_reader notification_position: Symbol
+      attr_reader notification_style: Symbol
+      attr_reader test_start_delay: Float
+
+      def initialize: () -> void
+      def enabled=: (untyped value) -> bool
+      def delay=: (Numeric value) -> Float
+      def notifications=: (untyped value) -> bool
+      def notification_position=: (Symbol value) -> Symbol
+      def notification_style=: (Symbol value) -> Symbol
+      def test_start_delay=: (Numeric value) -> Float
+
+      private
+
+      def parse_float_env: (String env_var, Float default) -> Float
+    end
+
+    module Notifications
+      def presenter_notification: (String title, ?String? message, ?type: Symbol, ?duration: Integer) -> void
+      def presenter_milestone: (String title, ?String? message) -> void
+      def presenter_test_start_notification: (Class test_class, String test_method) -> void
+
+      private
+
+      def show_browser_notification: (String title, String? message, Symbol type, Integer duration) -> void
+      def has_browser_access?: () -> bool
+      def notification_javascript: (String title, String? message, Symbol type, Integer duration) -> String
+      def notification_position_css: () -> String
+      def sanitize_for_js: (String? string) -> String
+      def sanitize_for_html: (String? string) -> String
+    end
+
+    module Delays
+      def presenter_delay: (?Float? seconds) -> void
+    end
+
+    module CapybaraExtensions
+      def setup_presenter_delays: () -> void
+
+      private
+
+      def log_presenter_action: (Symbol action, untyped target) -> void
+    end
+
+    def self.configuration: () -> Configuration
+    def self.configure: () { (Configuration) -> void } -> void
+    def self.reset_configuration!: () -> Configuration
+    def self.show_setup_guidance: () -> void
+
+    module ClassMethods
+      def presenter_mode?: () -> bool
+      def presenter_delay_duration: () -> Float
+      def presenter_notifications_enabled?: () -> bool
+    end
+
+    module InstanceMethods
+      def presenter_mode?: () -> bool
+      def presenter_delay_duration: () -> Float
+      def presenter_notifications_enabled?: () -> bool
+    end
   end
 end

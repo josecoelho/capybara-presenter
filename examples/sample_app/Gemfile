@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "capybara"
-gem "selenium-webdriver"
-gem "minitest"
-gem "rack"
-gem "puma"
+gem 'capybara'
+gem 'minitest'
+gem 'puma'
+gem 'rack'
+gem 'selenium-webdriver'
 
 # Our gem (in real usage, this would be: gem 'capybara-presenter')
-gem "capybara-presenter", path: "../.."
+gem 'capybara-presenter', path: '../..'

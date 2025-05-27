@@ -1,8 +1,9 @@
 AllCops:
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
   SuggestExtensions: false
+  NewCops: enable
 
-require:
+plugins:
   - rubocop-minitest
 
 # Exclude test directories from metrics
@@ -23,3 +24,8 @@ Naming/PredicateName:
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
+
+# Allow multiple assertions in system tests
+Minitest/MultipleAssertions:
+  Exclude:
+    - 'examples/**/*'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "test_helper"
-require "capybara"
+require 'test_helper'
+require 'capybara'
 
 class TestCapybaraPresenter < Minitest::Test
   def setup
@@ -23,30 +23,30 @@ class TestCapybaraPresenter < Minitest::Test
       config.notifications = false
     end
 
-    assert_equal true, Capybara::Presenter.configuration.enabled
-    assert_equal 1.5, Capybara::Presenter.configuration.delay
-    assert_equal false, Capybara::Presenter.configuration.notifications
+    assert Capybara::Presenter.configuration.enabled
+    assert_in_delta(1.5, Capybara::Presenter.configuration.delay)
+    refute Capybara::Presenter.configuration.notifications
   end
 
   def test_reads_from_environment_variables
-    original_mode = ENV["PRESENTER_MODE"]
-    original_delay = ENV["PRESENTER_DELAY"]  
-    original_notifications = ENV["PRESENTER_NOTIFICATIONS"]
-    
+    original_mode = ENV.fetch('PRESENTER_MODE', nil)
+    original_delay = ENV.fetch('PRESENTER_DELAY', nil)
+    original_notifications = ENV.fetch('PRESENTER_NOTIFICATIONS', nil)
+
     begin
-      ENV["PRESENTER_MODE"] = "true"
-      ENV["PRESENTER_DELAY"] = "2.5"
-      ENV["PRESENTER_NOTIFICATIONS"] = "false"
-      
+      ENV['PRESENTER_MODE'] = 'true'
+      ENV['PRESENTER_DELAY'] = '2.5'
+      ENV['PRESENTER_NOTIFICATIONS'] = 'false'
+
       Capybara::Presenter.reset_configuration!
 
-      assert_equal true, Capybara::Presenter.configuration.enabled
-      assert_equal 2.5, Capybara::Presenter.configuration.delay
-      assert_equal false, Capybara::Presenter.configuration.notifications
+      assert Capybara::Presenter.configuration.enabled
+      assert_in_delta(2.5, Capybara::Presenter.configuration.delay)
+      refute Capybara::Presenter.configuration.notifications
     ensure
-      ENV["PRESENTER_MODE"] = original_mode
-      ENV["PRESENTER_DELAY"] = original_delay
-      ENV["PRESENTER_NOTIFICATIONS"] = original_notifications
+      ENV['PRESENTER_MODE'] = original_mode
+      ENV['PRESENTER_DELAY'] = original_delay
+      ENV['PRESENTER_NOTIFICATIONS'] = original_notifications
     end
   end
 
@@ -54,14 +54,14 @@ class TestCapybaraPresenter < Minitest::Test
     test_instance = create_test_instance
     Capybara::Presenter.configure { |config| config.enabled = true }
 
-    assert test_instance.presenter_mode?
+    assert_predicate test_instance, :presenter_mode?
   end
 
   def test_presenter_mode_when_disabled
     test_instance = create_test_instance
     Capybara::Presenter.configure { |config| config.enabled = false }
 
-    refute test_instance.presenter_mode?
+    refute_predicate test_instance, :presenter_mode?
   end
 
   def test_presenter_delay_sleeps_when_enabled
@@ -101,7 +101,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     # Mock will be set up in create_test_instance already
-    test_instance.presenter_notification("Test Title", "Test message")
+    test_instance.presenter_notification('Test Title', 'Test message')
   end
 
   def test_presenter_notification_does_not_show_when_disabled
@@ -109,7 +109,7 @@ class TestCapybaraPresenter < Minitest::Test
     Capybara::Presenter.configure { |config| config.enabled = false }
 
     # Should not call execute_script
-    test_instance.presenter_notification("Test Title", "Test message")
+    test_instance.presenter_notification('Test Title', 'Test message')
   end
 
   def test_presenter_notification_does_not_show_when_notifications_disabled
@@ -120,7 +120,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     # Should not call execute_script
-    test_instance.presenter_notification("Test Title", "Test message")
+    test_instance.presenter_notification('Test Title', 'Test message')
   end
 
   def test_presenter_milestone_shows_notification_and_delays
@@ -130,7 +130,7 @@ class TestCapybaraPresenter < Minitest::Test
       config.notifications = true
     end
 
-    test_instance.presenter_milestone("Step Complete", "Description")
+    test_instance.presenter_milestone('Step Complete', 'Description')
   end
 
   def test_notification_types
@@ -141,7 +141,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     %i[info success warning error].each do |type|
-      test_instance.presenter_notification("Test", "Message", type: type)
+      test_instance.presenter_notification('Test', 'Message', type: type)
     end
   end
 
@@ -157,9 +157,9 @@ class TestCapybaraPresenter < Minitest::Test
     # Test visit method wrapping
     test_instance.expect :presenter_delay, nil, [0.5]  # Pre-action delay
     test_instance.expect :presenter_delay, nil, [0.8]  # Post-action delay
-    test_instance.expect :visit_without_presenter, nil, ["/test"]
+    test_instance.expect :visit_without_presenter, nil, ['/test']
 
-    test_instance.visit("/test")
+    test_instance.visit('/test')
     test_instance.verify
 
     # Reset expectations for next test
@@ -173,9 +173,9 @@ class TestCapybaraPresenter < Minitest::Test
     # Test click_button method wrapping
     test_instance.expect :presenter_delay, nil, [0.3]  # Pre-action delay
     test_instance.expect :presenter_delay, nil, [0.8]  # Post-action delay
-    test_instance.expect :click_button_without_presenter, nil, ["Submit"]
+    test_instance.expect :click_button_without_presenter, nil, ['Submit']
 
-    test_instance.click_button("Submit")
+    test_instance.click_button('Submit')
     test_instance.verify
   end
 
@@ -185,7 +185,7 @@ class TestCapybaraPresenter < Minitest::Test
         config.delay = -1
       end
     end
-    assert_equal "delay must be a positive number", error.message
+    assert_equal 'delay must be a positive number', error.message
   end
 
   def test_configuration_validation_notification_position
@@ -194,7 +194,7 @@ class TestCapybaraPresenter < Minitest::Test
         config.notification_position = :invalid
       end
     end
-    assert_equal "notification_position must be one of: top, center, bottom", error.message
+    assert_equal 'notification_position must be one of: top, center, bottom', error.message
   end
 
   def test_configuration_validation_notification_style
@@ -203,7 +203,7 @@ class TestCapybaraPresenter < Minitest::Test
         config.notification_style = :invalid
       end
     end
-    assert_equal "notification_style must be one of: system, toast", error.message
+    assert_equal 'notification_style must be one of: system, toast', error.message
   end
 
   def test_gracefully_handles_missing_page
@@ -214,7 +214,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     # Should not raise error
-    test_instance.presenter_notification("Test", "Message")
+    test_instance.presenter_notification('Test', 'Message')
   end
 
   def test_gracefully_handles_missing_driver
@@ -225,7 +225,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     # Should not raise error
-    test_instance.presenter_notification("Test", "Message")
+    test_instance.presenter_notification('Test', 'Message')
   end
 
   def test_gracefully_handles_javascript_errors
@@ -236,10 +236,10 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     browser_mock = test_instance.page.driver.browser
-    browser_mock.expect :execute_script, -> { raise StandardError.new("JS Error") }, [String]
+    browser_mock.expect :execute_script, -> { raise StandardError, 'JS Error' }, [String]
 
     # Should not raise error
-    test_instance.presenter_notification("Test", "Message")
+    test_instance.presenter_notification('Test', 'Message')
   end
 
   private
@@ -255,13 +255,13 @@ class TestCapybaraPresenter < Minitest::Test
     browser_mock.expect :execute_script, nil, [String]
     browser_mock.expect :execute_script, nil, [String]
     browser_mock.expect :execute_script, nil, [String]
-    
+
     driver_mock.expect :browser, browser_mock
     driver_mock.expect :browser, browser_mock
     driver_mock.expect :browser, browser_mock
     driver_mock.expect :browser, browser_mock
     driver_mock.expect :browser, browser_mock
-    
+
     page_mock.expect :driver, driver_mock
 
     test_class = Class.new do
@@ -287,7 +287,7 @@ class TestCapybaraPresenter < Minitest::Test
     end
 
     instance = test_class.new(page_mock)
-    
+
     # Add mock capabilities to the instance
     instance.define_singleton_method(:expect) do |method, return_value, args|
       @expectations ||= []

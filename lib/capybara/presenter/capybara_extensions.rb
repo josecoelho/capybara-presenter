@@ -2,13 +2,17 @@
 
 module Capybara
   module Presenter
+    # Extends Capybara methods with presentation features.
+    # Wraps common Capybara actions to add delays and logging for better presentations.
     module CapybaraExtensions
-      WRAPPED_METHODS = %i[visit click_button click_link click_on fill_in select choose check uncheck attach_file].freeze
+      WRAPPED_METHODS = %i[visit click_button click_link click_on fill_in select choose check uncheck
+                           attach_file].freeze
 
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def setup_presenter_delays
         return unless presenter_mode?
         return if self.class.instance_variable_get(:@presenter_delays_setup)
-        
+
         self.class.instance_variable_set(:@presenter_delays_setup, true)
 
         WRAPPED_METHODS.each do |action|
@@ -21,7 +25,7 @@ module Capybara
           self.class.define_method(action) do |*args, **kwargs, &block|
             if presenter_mode?
               log_presenter_action(action, args.first)
-              
+
               # Pre-action delay
               case action
               when :click_button, :click_link, :click_on
@@ -39,17 +43,17 @@ module Capybara
             result = send(:"#{action}_without_presenter", *args, **kwargs, &block)
 
             # Post-action delay for actions that trigger page changes
-            if presenter_mode? && [:click_button, :click_link, :click_on, :visit].include?(action)
-              presenter_delay(0.8)
-            end
+            presenter_delay(0.8) if presenter_mode? && %i[click_button click_link click_on visit].include?(action)
 
             result
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       private
 
+      # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def log_presenter_action(action, target)
         return unless presenter_mode?
 
@@ -66,6 +70,7 @@ module Capybara
           puts "📎 Attaching file: #{target}" if target
         end
       end
+      # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     end
   end
 end
