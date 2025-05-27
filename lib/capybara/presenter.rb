@@ -3,7 +3,6 @@
 require_relative 'presenter/version'
 require_relative 'presenter/configuration'
 require_relative 'presenter/notifications'
-require_relative 'presenter/delays'
 require_relative 'presenter/capybara_extensions'
 
 module Capybara
@@ -77,11 +76,16 @@ module Capybara
     # Instance-level helper methods for checking presenter configuration.
     module InstanceMethods
       include Notifications
-      include Delays
       include CapybaraExtensions
 
       def presenter_mode?
         self.class.presenter_mode?
+      end
+
+      def presenter_delay(seconds = nil)
+        return unless presenter_mode?
+
+        sleep(seconds || presenter_delay_duration)
       end
 
       def presenter_delay_duration
