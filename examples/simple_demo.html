@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capybara Demo - Simple Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        button:hover {
+            background: #005a87;
+        }
+        
+        .demo-controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .demo-button {
+            background: #28a745;
+            margin: 5px;
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Registration</h1>
+    
+    <div class="form-container">
+        <form>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    
+    <div class="demo-controls">
+        <h3>Demo Notifications</h3>
+        <button class="demo-button" onclick="startDemo()">Start Demo</button>
+        <button class="demo-button" onclick="showNotification('Form Complete', 'All fields filled')">Show Milestone</button>
+    </div>
+
+    <script>
+        // Simple notification system (mimics capybara-demo gem)
+        function showNotification(title, message = null) {
+            // Remove existing notifications
+            document.querySelectorAll('.demo-notification').forEach(el => el.remove());
+
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = 'demo-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 5px;
+                font-size: 18px;
+                font-weight: bold;
+                text-align: center;
+                z-index: 1000;
+                min-width: 300px;
+            `;
+
+            notification.innerHTML = `
+                <div style="font-size: 20px; margin-bottom: ${message ? '8px' : '0'};">${title}</div>
+                ${message ? `<div style="font-size: 16px; opacity: 0.9;">${message}</div>` : ''}
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2500);
+        }
+
+        async function startDemo() {
+            showNotification('🌐 Navigation', 'visit "/users/new"');
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            showNotification('⌨️ Form Input', 'fill_in "Email", with: "user@example.com"');
+            document.getElementById('email').value = 'user@example.com';
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            
+            showNotification('⌨️ Form Input', 'fill_in "Password", with: "password123"');
+            document.getElementById('password').value = 'password123';
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            
+            showNotification('📋 Form Complete', 'All required fields filled');
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            
+            showNotification('🖱️ Button Click', 'click_button "Sign Up"');
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            
+            showNotification('✅ Success', 'User registration complete');
+        }
+    </script>
+</body>
+</html>
