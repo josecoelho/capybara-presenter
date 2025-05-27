@@ -14,13 +14,13 @@ class UserRegistrationTest < SystemTestCase
     
     fill_in "Email", with: "user@example.com"
     fill_in "Password", with: "secretpassword123"
-    demo_milestone("Form Complete", "All required fields filled")
+    presenter_milestone("Form Complete", "All required fields filled")
     
     click_button "Create Account"
     
     assert_text "Welcome!"
     assert_text "Your account has been created successfully"
-    demo_milestone("Registration Success", "User account created successfully")
+    presenter_milestone("Registration Success", "User account created successfully")
   end
 
   def test_registration_form_has_required_fields
@@ -33,6 +33,6 @@ class UserRegistrationTest < SystemTestCase
     assert_selector "input[type='password'][required]"
     assert_selector "button[type='submit']", text: "Create Account"
     
-    demo_milestone("Validation Complete", "All required form fields are present")
+    presenter_milestone("Form Validation", "Verified all required form fields exist")
   end
 end

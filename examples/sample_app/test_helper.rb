@@ -7,18 +7,18 @@ require "selenium-webdriver"
 
 # Load our gem (adjust path for development)
 $LOAD_PATH.unshift File.expand_path("../../lib", __dir__)
-require "capybara/demo"
+require "capybara/presenter"
 
 # Configure Capybara
 Capybara.app = Rack::Builder.parse_file(File.expand_path("config.ru", __dir__))
 Capybara.server = :puma, { Silent: true }
 
-# Configure driver based on demo mode
-if ENV["DEMO_MODE"] == "true"
-  puts "🎬 Demo mode: Attempting to open Chrome browser for notifications..."
+# Configure driver based on presenter mode
+if ENV["PRESENTER_MODE"] == "true"
+  puts "🎬 Presenter mode: Attempting to open Chrome browser for notifications..."
   
   # Register the Chrome driver
-  Capybara.register_driver :demo_chrome do |app|
+  Capybara.register_driver :presenter_chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
     
     # Chrome options for demo recording
@@ -38,9 +38,9 @@ if ENV["DEMO_MODE"] == "true"
   end
   
   begin
-    Capybara.default_driver = :demo_chrome
-    Capybara.current_driver = :demo_chrome
-    puts "✅ Chrome browser ready for demo notifications"
+    Capybara.default_driver = :presenter_chrome
+    Capybara.current_driver = :presenter_chrome
+    puts "✅ Chrome browser ready for presenter notifications"
   rescue => e
     puts "⚠️  Falling back to rack_test (no browser notifications)"
     puts "   Error: #{e.message}"
@@ -53,26 +53,26 @@ else
 end
 
 # Configure our gem
-Capybara::Demo.configure do |config|
-  config.enabled = ENV["DEMO_MODE"] == "true"
-  config.delay = ENV["DEMO_DELAY"]&.to_f || 2.0
-  config.notifications = ENV["DEMO_NOTIFICATIONS"] != "false"
+Capybara::Presenter.configure do |config|
+  config.enabled = ENV["PRESENTER_MODE"] == "true"
+  config.delay = ENV["PRESENTER_DELAY"]&.to_f || 2.0
+  config.notifications = ENV["PRESENTER_NOTIFICATIONS"] != "false"
   config.notification_position = :center
-  config.test_start_delay = ENV["DEMO_TEST_START_DELAY"]&.to_f || 2.0
+  config.test_start_delay = ENV["PRESENTER_TEST_START_DELAY"]&.to_f || 2.0
 end
 
 class SystemTestCase < Minitest::Test
   include Capybara::DSL
   include Capybara::Minitest::Assertions
-  include Capybara::Demo
+  include Capybara::Presenter
 
   def setup
-    setup_demo_delays if demo_mode?
+    setup_presenter_delays if presenter_mode?
     
-    if demo_mode?
-      puts "🎬 Demo mode: ON"
+    if presenter_mode?
+      puts "🎬 Presenter mode: ON"
       # Show test start notification with 2s delay
-      demo_test_start_notification(self.class, name)
+      presenter_test_start_notification(self.class, name)
     end
   end
 

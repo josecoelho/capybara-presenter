@@ -5,42 +5,42 @@ module Capybara
     module CapybaraExtensions
       WRAPPED_METHODS = %i[visit click_button click_link click_on fill_in select choose check uncheck attach_file].freeze
 
-      def setup_demo_delays
-        return unless demo_mode?
-        return if self.class.instance_variable_get(:@demo_delays_setup)
+      def setup_presenter_delays
+        return unless presenter_mode?
+        return if self.class.instance_variable_get(:@presenter_delays_setup)
         
-        self.class.instance_variable_set(:@demo_delays_setup, true)
+        self.class.instance_variable_set(:@presenter_delays_setup, true)
 
         WRAPPED_METHODS.each do |action|
-          next if respond_to?(:"#{action}_without_demo")
+          next if respond_to?(:"#{action}_without_presenter")
 
           # Create alias for original method
-          self.class.alias_method :"#{action}_without_demo", action
+          self.class.alias_method :"#{action}_without_presenter", action
 
-          # Override the method with demo delays
+          # Override the method with presenter delays
           self.class.define_method(action) do |*args, **kwargs, &block|
-            if demo_mode?
-              log_demo_action(action, args.first)
+            if presenter_mode?
+              log_presenter_action(action, args.first)
               
               # Pre-action delay
               case action
               when :click_button, :click_link, :click_on
-                demo_delay(0.3)
+                presenter_delay(0.3)
               when :fill_in, :select, :choose, :check, :uncheck
-                demo_delay(0.2)
+                presenter_delay(0.2)
               when :visit
-                demo_delay(0.5)
+                presenter_delay(0.5)
               when :attach_file
-                demo_delay(0.3)
+                presenter_delay(0.3)
               end
             end
 
             # Execute the original action
-            result = send(:"#{action}_without_demo", *args, **kwargs, &block)
+            result = send(:"#{action}_without_presenter", *args, **kwargs, &block)
 
             # Post-action delay for actions that trigger page changes
-            if demo_mode? && [:click_button, :click_link, :click_on, :visit].include?(action)
-              demo_delay(0.8)
+            if presenter_mode? && [:click_button, :click_link, :click_on, :visit].include?(action)
+              presenter_delay(0.8)
             end
 
             result
@@ -50,8 +50,8 @@ module Capybara
 
       private
 
-      def log_demo_action(action, target)
-        return unless demo_mode?
+      def log_presenter_action(action, target)
+        return unless presenter_mode?
 
         case action
         when :click_button, :click_link, :click_on

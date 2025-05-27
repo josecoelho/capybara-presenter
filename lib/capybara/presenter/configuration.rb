@@ -6,12 +6,12 @@ module Capybara
       attr_reader :enabled, :delay, :notifications, :notification_position, :notification_style, :test_start_delay
 
       def initialize
-        @enabled = ENV["DEMO_MODE"] == "true"
-        @delay = ENV["DEMO_DELAY"]&.to_f || 2.0
-        @notifications = ENV["DEMO_NOTIFICATIONS"] != "false"
+        @enabled = ENV["PRESENTER_MODE"] == "true"
+        @delay = ENV["PRESENTER_DELAY"]&.to_f || 2.0
+        @notifications = ENV["PRESENTER_NOTIFICATIONS"] != "false"
         @notification_position = :center
         @notification_style = :system
-        @test_start_delay = ENV["DEMO_TEST_START_DELAY"]&.to_f || 2.0
+        @test_start_delay = ENV["PRESENTER_TEST_START_DELAY"]&.to_f || 2.0
       end
 
       def enabled=(value)

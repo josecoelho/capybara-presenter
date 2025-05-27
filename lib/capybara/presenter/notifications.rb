@@ -3,27 +3,27 @@
 module Capybara
   module Presenter
     module Notifications
-      def demo_notification(title, message = nil, type: :info, duration: 4000)
-        return unless demo_mode? && demo_notifications_enabled?
+      def presenter_notification(title, message = nil, type: :info, duration: 4000)
+        return unless presenter_mode? && presenter_notifications_enabled?
 
         show_browser_notification(title, message, type, duration)
       end
 
-      def demo_milestone(title, message = nil)
-        return unless demo_mode?
-        demo_notification("📋 #{title}", message, type: :success, duration: 3000)
-        demo_delay(1.0)
+      def presenter_milestone(title, message = nil)
+        return unless presenter_mode?
+        presenter_notification("📋 #{title}", message, type: :success, duration: 3000)
+        presenter_delay(1.0)
       end
 
-      def demo_test_start_notification(test_class, test_method)
-        return unless demo_mode? && demo_notifications_enabled?
+      def presenter_test_start_notification(test_class, test_method)
+        return unless presenter_mode? && presenter_notifications_enabled?
 
         test_name = test_class.name.gsub(/Test$/, "")
         method_name = test_method.gsub(/^test_/, "").gsub(/_/, " ").split.map(&:capitalize).join(" ")
 
-        demo_notification("🧪 #{test_name}", "Running: #{method_name}", type: :info, duration: 8000)
+        presenter_notification("🧪 #{test_name}", "Running: #{method_name}", type: :info, duration: 8000)
         puts "📋 Starting test: #{test_name} - #{method_name}"
-        demo_delay(Capybara::Presenter.configuration.test_start_delay)
+        presenter_delay(Capybara::Presenter.configuration.test_start_delay)
       end
 
       private
@@ -35,7 +35,7 @@ module Capybara
           page.driver.browser.execute_script(notification_javascript(title, message, type, duration))
         rescue => e
           # Gracefully handle JavaScript errors
-          puts "Demo notification failed: #{e.message}" if ENV["DEBUG"]
+          puts "Presenter notification failed: #{e.message}" if ENV["DEBUG"]
         end
       end
 
@@ -48,16 +48,16 @@ module Capybara
       def notification_javascript(title, message, type, duration)
         position = notification_position_css
         <<~JS
-          console.log('Demo notification: #{title.gsub("'", "\\'")}');
+          console.log('Presenter notification: #{title.gsub("'", "\\'")}');
 
-          // Remove existing demo notifications
-          document.querySelectorAll('.demo-notification').forEach(el => el.remove());
+          // Remove existing presenter notifications
+          document.querySelectorAll('.presenter-notification').forEach(el => el.remove());
 
           // Create notification container if it doesn't exist
-          let container = document.getElementById('demo-notification-container');
+          let container = document.getElementById('presenter-notification-container');
           if (!container) {
             container = document.createElement('div');
-            container.id = 'demo-notification-container';
+            container.id = 'presenter-notification-container';
             container.style.cssText = `
               position: fixed;
               #{position}
@@ -73,7 +73,7 @@ module Capybara
 
           // Create notification element
           const notification = document.createElement('div');
-          notification.className = 'demo-notification';
+          notification.className = 'presenter-notification';
 
           notification.style.cssText = `
             background: rgba(0, 0, 0, 0.5);

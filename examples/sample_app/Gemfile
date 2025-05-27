@@ -8,5 +8,5 @@ gem "minitest"
 gem "rack"
 gem "puma"
 
-# Our gem (in real usage, this would be: gem 'capybara-demo')
-gem "capybara-demo", path: "../.."
+# Our gem (in real usage, this would be: gem 'capybara-presenter')
+gem "capybara-presenter", path: "../.."

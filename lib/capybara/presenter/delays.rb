@@ -3,9 +3,9 @@
 module Capybara
   module Presenter
     module Delays
-      def demo_delay(seconds = nil)
-        return unless demo_mode?
-        sleep(seconds || demo_delay_duration)
+      def presenter_delay(seconds = nil)
+        return unless presenter_mode?
+        sleep(seconds || presenter_delay_duration)
       end
     end
   end

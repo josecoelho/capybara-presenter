@@ -28,7 +28,7 @@ module Capybara
       base.extend(ClassMethods)
       base.include(InstanceMethods)
       
-      # Show setup guidance when demo mode is enabled
+      # Show setup guidance when presenter mode is enabled
       if configuration.enabled
         show_setup_guidance
       end
@@ -45,9 +45,9 @@ module Capybara
         3. Disable parallel testing: parallelize(workers: 1)
         
         Environment variables:
-        - DEMO_DELAY=2.0 (action delays)
-        - DEMO_TEST_START_DELAY=2.0 (pause before each test)
-        - DEMO_NOTIFICATIONS=false (disable notifications)
+        - PRESENTER_DELAY=2.0 (action delays)
+        - PRESENTER_TEST_START_DELAY=2.0 (pause before each test)
+        - PRESENTER_NOTIFICATIONS=false (disable notifications)
         
         💡 This gem works with your existing Capybara driver configuration
         
@@ -55,15 +55,15 @@ module Capybara
     end
 
     module ClassMethods
-      def demo_mode?
+      def presenter_mode?
         Capybara::Presenter.configuration.enabled
       end
 
-      def demo_delay_duration
+      def presenter_delay_duration
         Capybara::Presenter.configuration.delay
       end
 
-      def demo_notifications_enabled?
+      def presenter_notifications_enabled?
         Capybara::Presenter.configuration.notifications
       end
     end
@@ -73,16 +73,16 @@ module Capybara
       include Delays
       include CapybaraExtensions
 
-      def demo_mode?
-        self.class.demo_mode?
+      def presenter_mode?
+        self.class.presenter_mode?
       end
 
-      def demo_delay_duration
-        self.class.demo_delay_duration
+      def presenter_delay_duration
+        self.class.presenter_delay_duration
       end
 
-      def demo_notifications_enabled?
-        self.class.demo_notifications_enabled?
+      def presenter_notifications_enabled?
+        self.class.presenter_notifications_enabled?
       end
     end
   end
