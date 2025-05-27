@@ -2,6 +2,8 @@
 
 Transform your Capybara system tests into polished presentations with automatic delays and browser notifications. Perfect for creating professional test recordings and demos.
 
+![Demo](./examples/presenter.gif)
+
 ## Installation
 
 Add this line to your application's Gemfile:
