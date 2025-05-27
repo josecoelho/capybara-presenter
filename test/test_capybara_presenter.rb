@@ -197,15 +197,6 @@ class TestCapybaraPresenter < Minitest::Test
     assert_equal 'notification_position must be one of: top, center, bottom', error.message
   end
 
-  def test_configuration_validation_notification_style
-    error = assert_raises ArgumentError do
-      Capybara::Presenter.configure do |config|
-        config.notification_style = :invalid
-      end
-    end
-    assert_equal 'notification_style must be one of: system, toast', error.message
-  end
-
   def test_gracefully_handles_missing_page
     test_instance = create_test_instance_with_nil_page
     Capybara::Presenter.configure do |config|

@@ -5,14 +5,13 @@ module Capybara
     # Configuration class for Capybara::Presenter settings.
     # Manages global settings like delays, notifications, and environment variable parsing.
     class Configuration
-      attr_reader :enabled, :delay, :notifications, :notification_position, :notification_style, :test_start_delay
+      attr_reader :enabled, :delay, :notifications, :notification_position, :test_start_delay
 
       def initialize
         @enabled = ENV['PRESENTER_MODE'] == 'true'
         @delay = parse_float_env('PRESENTER_DELAY', 2.0)
         @notifications = ENV['PRESENTER_NOTIFICATIONS'] != 'false'
         @notification_position = :center
-        @notification_style = :system
         @test_start_delay = parse_float_env('PRESENTER_TEST_START_DELAY', 2.0)
       end
 
@@ -37,15 +36,6 @@ module Capybara
         end
 
         @notification_position = value
-      end
-
-      def notification_style=(value)
-        valid_styles = %i[system toast]
-        unless valid_styles.include?(value)
-          raise ArgumentError, "notification_style must be one of: #{valid_styles.join(', ')}"
-        end
-
-        @notification_style = value
       end
 
       def test_start_delay=(value)
