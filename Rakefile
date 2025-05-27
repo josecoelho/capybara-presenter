@@ -10,8 +10,8 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/**/test_*.rb"]
 end
 
-# Demo and example tasks
-namespace :demo do
+# Presenter and example tasks
+namespace :presenter do
   desc "Run the sample app system tests in normal mode"
   task :test do
     Dir.chdir("examples/sample_app") do
@@ -19,10 +19,10 @@ namespace :demo do
     end
   end
 
-  desc "Run the sample app system tests in demo mode"
+  desc "Run the sample app system tests in presenter mode"
   task :run do
     Dir.chdir("examples/sample_app") do
-      sh "DEMO_MODE=true ruby system_test.rb"
+      sh "PRESENTER_MODE=true ruby system_test.rb"
     end
   end
 
@@ -33,40 +33,40 @@ namespace :demo do
     end
   end
 
-  desc "Run demo with custom delays (DELAY=3.0 START_DELAY=2.0)"
+  desc "Run presenter with custom delays (DELAY=3.0 START_DELAY=2.0)"
   task :slow do
     delay = ENV["DELAY"] || "3.0"
     start_delay = ENV["START_DELAY"] || "2.0"
     Dir.chdir("examples/sample_app") do
-      sh "DEMO_MODE=true DEMO_DELAY=#{delay} DEMO_TEST_START_DELAY=#{start_delay} ruby system_test.rb"
+      sh "PRESENTER_MODE=true PRESENTER_DELAY=#{delay} PRESENTER_TEST_START_DELAY=#{start_delay} ruby system_test.rb"
     end
   end
 
-  desc "Show all demo options"
+  desc "Show all presenter options"
   task :help do
     puts <<~HELP
-      🎬 Capybara::Demo - Available Rake Tasks
+      🎬 Capybara::Presenter - Available Rake Tasks
 
       Main Tasks:
-        rake test           - Run gem unit tests
-        rake demo:test      - Run sample app tests (normal mode)
-        rake demo:run       - Run sample app tests (demo mode)
-        rake demo:browser   - Run live browser demo
-        rake demo:slow      - Run demo with slower timing
+        rake test               - Run gem unit tests
+        rake presenter:test     - Run sample app tests (normal mode)
+        rake presenter:run      - Run sample app tests (presenter mode)
+        rake presenter:browser  - Run live browser demo
+        rake presenter:slow     - Run presenter with slower timing
 
-      Custom Demo Options:
-        rake demo:slow DELAY=3.0 START_DELAY=2.0
+      Custom Presenter Options:
+        rake presenter:slow DELAY=3.0 START_DELAY=2.0
         
       Environment Variables:
-        DEMO_MODE=true              - Enable demo mode
-        DEMO_DELAY=2.0              - Action delay in seconds
-        DEMO_TEST_START_DELAY=2.0   - Test start delay in seconds
-        DEMO_NOTIFICATIONS=false    - Disable notifications
+        PRESENTER_MODE=true              - Enable presenter mode
+        PRESENTER_DELAY=2.0              - Action delay in seconds
+        PRESENTER_TEST_START_DELAY=2.0   - Test start delay in seconds
+        PRESENTER_NOTIFICATIONS=false    - Disable notifications
         
       Examples:
-        rake demo:run                          # Basic demo
-        DEMO_DELAY=1.0 rake demo:run          # Faster demo
-        DEMO_NOTIFICATIONS=false rake demo:run # No notifications
+        rake presenter:run                                  # Basic presenter
+        PRESENTER_DELAY=1.0 rake presenter:run            # Faster presenter
+        PRESENTER_NOTIFICATIONS=false rake presenter:run  # No notifications
     HELP
   end
 end
@@ -95,9 +95,9 @@ namespace :examples do
         rake examples:html     - Simple browser notification demo
         
       Sample App:
-        rake demo:test         - System tests (normal mode)
-        rake demo:run          - System tests (demo mode)
-        rake demo:browser      - Live browser demo
+        rake presenter:test     - System tests (normal mode)
+        rake presenter:run      - System tests (presenter mode)
+        rake presenter:browser  - Live browser demo
     EXAMPLES
   end
 end
@@ -108,14 +108,14 @@ task default: :test
 desc "Show all available tasks"
 task :help do
   puts <<~HELP
-    🎬 Capybara::Demo Gem
+    🎬 Capybara::Presenter Gem
 
     Main Commands:
-      rake test          - Run gem tests
-      rake demo:help     - Demo options
-      rake examples:list - Available examples
+      rake test              - Run gem tests
+      rake presenter:help    - Presenter options
+      rake examples:list     - Available examples
       
     Quick Start:
-      rake demo:run      - See the gem in action!
+      rake presenter:run     - See the gem in action!
   HELP
 end
